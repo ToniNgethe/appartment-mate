@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import logo from "../assets/apmate.png";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { login } from "../slices/authSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {};
+  const state = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    await dispatch(
+      login({
+        email,
+        password,
+      })
+    );
+  };
   return (
     <>
       <div className="row justify-content-center">
@@ -21,7 +35,14 @@ function Login() {
               <h2 className="fs-6 fw-normal text-center text-secondary mb-4">
                 Sign in to your account
               </h2>
-              <form action="#!">
+
+              {state.error != null && (
+                <div className="alert alert-danger" role="alert">
+                  {state.error}
+                </div>
+              )}
+
+              <form>
                 <div className="row gy-2 overflow-hidden">
                   <div className="col-12">
                     <div className="form-floating mb-3">
@@ -59,21 +80,6 @@ function Login() {
                   </div>
                   <div className="col-12">
                     <div className="d-flex gap-2 justify-content-between">
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value=""
-                          name="rememberMe"
-                          id="rememberMe"
-                        />
-                        <label
-                          className="form-check-label text-secondary"
-                          htmlFor="rememberMe"
-                        >
-                          Keep me logged in
-                        </label>
-                      </div>
                       <a
                         href="#!"
                         className="link-primary text-decoration-none"
@@ -86,10 +92,19 @@ function Login() {
                     <div className="d-grid my-3">
                       <button
                         className="btn btn-primary btn-lg"
-                        type="submit"
                         onClick={handleLogin}
                       >
-                        Log in
+                        {state.status == "loading" ? (
+                          <div
+                            className="spinner-border text-dark"
+                            role="status"
+                          >
+                            {" "}
+                            <span className="visually-hidden">Loading...</span>
+                          </div>
+                        ) : (
+                          "Log in"
+                        )}
                       </button>
                     </div>
                   </div>

@@ -1,0 +1,13 @@
+services:
+  django_app:
+    build: ./apart_visitors
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./appart_visitors:/code
+    ports:
+      - 8000:8000
+
+  react_app:
+    build: ./frontend
+    ports:
+      - 5174:5174
