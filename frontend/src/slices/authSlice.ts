@@ -1,5 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstnce from "../api/axiosInstance";
+import { appStorage } from "../storage/appStorage";
 
 // login request
 type LoginRequest = {
@@ -62,11 +63,11 @@ export const login = createAsyncThunk<
     if (resData.status == "01") {
       throw new Error(resData.message);
     }
+    // store token for future use
+    appStorage.saveToken(resData.auth_token);
 
     return resData;
   } catch (err) {
-    console.log("====");
-    console.log(err);
     if (err instanceof Error) {
       return thunkAPI.rejectWithValue({ error: err.message });
     } else {

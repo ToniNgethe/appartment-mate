@@ -4,6 +4,7 @@ import logo from "../assets/apmate.png";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { login } from "../slices/authSlice";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -111,12 +112,13 @@ function Login() {
                   <div className="col-12">
                     <p className="m-0 text-secondary text-center">
                       Don't have an account?{" "}
-                      <a
-                        href="#!"
+                      <Link
+                        to="/register"
                         className="link-primary text-decoration-none"
                       >
+                        {" "}
                         Sign up
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </div>
